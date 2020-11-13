@@ -1,8 +1,8 @@
-import React from "react";
-import { Layout } from "antd";
-import styled from "styled-components";
+import React from 'react';
+import {Layout} from 'antd';
+import styled from 'styled-components';
 
-const { Footer } = Layout;
+const {Footer} = Layout;
 
 const StyledFooter = styled(Footer)`
   text-align: center;

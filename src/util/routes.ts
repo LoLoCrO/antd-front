@@ -1,4 +1,4 @@
-import { IRouteFragment } from "../typescript/interfaces";
+import {IRouteFragment} from '../typescript/interfaces';
 
 const capitalizeFirstLetter = (name: string) => {
   if (name.length > 1) {
@@ -9,20 +9,16 @@ const capitalizeFirstLetter = (name: string) => {
 };
 
 export const getRouteFragments = (url: string): IRouteFragment[] => {
-  const pathnameFragments = url
-    .split("/")
-    .filter((element: string) => element !== "");
+  const pathnameFragments: string[] = url.split('/').filter((element: string) => element !== '');
 
-  const fragmentNamesAndRoutes: IRouteFragment[] = pathnameFragments.map(
-    (name: string, index: number) => ({
-      name: capitalizeFirstLetter(name),
-      route: pathnameFragments
-        .slice(0, index + 1)
-        .toString()
-        .replaceAll(",", "/")
-        .concat("/"),
-    })
-  );
+  const fragmentNamesAndRoutes: IRouteFragment[] = pathnameFragments.map((name: string, index: number) => ({
+    name: capitalizeFirstLetter(name),
+    route: pathnameFragments
+      .slice(0, index + 1)
+      .toString()
+      .replaceAll(',', '/')
+      .concat('/'),
+  }));
 
   return fragmentNamesAndRoutes;
 };

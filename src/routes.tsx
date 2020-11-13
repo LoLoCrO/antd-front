@@ -1,25 +1,37 @@
-import React from "react";
-import { Switch, Route } from "react-router-dom";
-import Home from "./pages/home";
-import Employees from "./pages/employees";
-import SubHome from "./pages/home/subhome";
-import Bla from "./pages/home/subhome/bla";
+import React from 'react';
+import {Switch, Route} from 'react-router-dom';
+import Home from './pages/home';
+import Employees from './pages/employees';
+import SubHome from './pages/home/subhome';
+import Bla from './pages/home/subhome/bla';
+import { IRoutes } from './typescript/interfaces';
+
+export const routes: IRoutes[] = [
+  {name: 'Index', route: '/', exact: true, page: <Home />},
+  {
+    name: 'Home',
+    route: '/home',
+    exact: true,
+    page: <Home />,
+    subRoutes: [
+      {
+        name: 'SubHome0',
+        route: '/home/subhome0',
+        exact: true,
+        subRoutes: [{name: 'Bla', route: '/home/subhome/bla', exact: true, page: <Bla />}],
+        page: <SubHome />,
+      },
+      {name: 'SubHome1', route: '/home/subhome1', exact: true, page: <SubHome />},
+      {name: 'SubHome2', route: '/home/subhome2', exact: true, page: <SubHome />},
+    ],
+  },
+  {name: 'Employees', route: '/employees', page: <Employees />},
+];
 
 const Routes = (): JSX.Element => {
-  const routes = [
-    { route: "/", exact: true, page: <Home /> },
-    { route: "/home", exact: true, page: <Home /> },
-    { route: "/home/subhome", exact: true, page: <SubHome /> },
-    { route: "/home/subhome/bla", exact: true, page: <Bla /> },
-    // { route: "/home", page: <Home pageName={"Home"} /> },
-    // { route: "/about", page: <About pageName={"About"} /> },
-    // { route: "/contact", page: <Contact pageName={"Contact"} /> },
-    { route: "/employees", page: <Employees  /> },
-  ];
-
   return (
     <Switch>
-      {routes.map(({ route, exact, page }) => (
+      {routes.map(({route, exact, page}) => (
         <Route key={route} exact={exact} path={route}>
           {page}
         </Route>
