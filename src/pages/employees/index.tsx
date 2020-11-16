@@ -20,15 +20,19 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
 
   const DispayUsersCards = () => (
     <>
-      {usersData.map((user: any) => (
-        <UserCard user={user} />
+      {usersData.map((user: any, index: number) => (
+        <UserCard key={index} user={user} />
       ))}
     </>
   );
 
   return (
-    <Row style={{ backgroundColor: "white", paddingTop: "3%", display: "flex" }}>
-      <Col span={24} style={{  paddingLeft: "3%", paddingBottom: "3%"}}>Empolyees</Col>
+    <Row
+      style={{ backgroundColor: "white", paddingTop: "3%", display: "flex" }}
+    >
+      <Col span={24} style={{ paddingLeft: "3%", paddingBottom: "3%" }}>
+        Empolyees
+      </Col>
       <Row justify="space-around">
         <DispayUsersCards />
       </Row>
