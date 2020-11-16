@@ -1,41 +1,71 @@
-import React from 'react';
-import {Switch, Route} from 'react-router-dom';
-import Home from './pages/home';
-import Employees from './pages/employees';
-import SubHome from './pages/home/subhome';
-import Bla from './pages/home/subhome/bla';
-import { IRoutes } from './typescript/interfaces';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
+import Home from "./pages/home";
+import Employees from "./pages/employees";
+import SubHome from "./pages/home/subhome";
+import Bla from "./pages/home/subhome/bla";
+import { IRoute } from "./typescript/interfaces";
 
-export const routes: IRoutes[] = [
-  {name: 'Index', route: '/', exact: true, page: <Home />},
+export const routes: IRoute[] = [
+  { name: "Index", route: "/", exact: true, page: Home },
   {
-    name: 'Home',
-    route: '/home',
+    name: "Home",
+    route: "/home",
     exact: true,
-    page: <Home />,
+    page: Home,
     subRoutes: [
       {
-        name: 'SubHome0',
-        route: '/home/subhome0',
+        name: "SubHome0",
+        route: "/home/subhome0",
         exact: true,
-        subRoutes: [{name: 'Bla', route: '/home/subhome0/bla', exact: true, page: <Bla />}],
-        page: <SubHome />,
+        subRoutes: [
+          {
+            name: "Bla",
+            route: "/home/subhome0/bla",
+            exact: true,
+            page: Bla,
+          },
+        ],
+        page: SubHome,
       },
-      {name: 'SubHome1', route: '/home/subhome1', exact: true, page: <SubHome />},
-      {name: 'SubHome2', route: '/home/subhome2', exact: true, page: <SubHome />},
+      {
+        name: "SubHome1",
+        route: "/home/subhome1",
+        exact: true,
+        page: SubHome,
+      },
+      {
+        name: "SubHome2",
+        route: "/home/subhome2",
+        exact: true,
+        page: SubHome,
+      },
     ],
   },
-  {name: 'Employees', route: '/employees', page: <Employees />},
+  { name: "Employees", route: "/employees", page: Employees },
+  { name: "Employees0", route: "/employees0", page: Employees },
 ];
+
+const AllRoutesAndSubRoutesPages = ({ routes }: { routes: IRoute[] }): any =>
+  routes
+    .map(({ route, exact, page, subRoutes }: IRoute) => {
+      if (!subRoutes || !subRoutes.length) {
+        return (
+          <Route key={route} exact={exact} path={route} component={page} />
+        );
+      } else {
+        return [
+          <Route key={route} exact={exact} path={route} component={page} />,
+          ...AllRoutesAndSubRoutesPages({ routes: subRoutes }),
+        ];
+      }
+    })
+    .flat(3);
 
 const Routes = (): JSX.Element => {
   return (
     <Switch>
-      {routes.map(({route, exact, page}) => (
-        <Route key={route} exact={exact} path={route}>
-          {page}
-        </Route>
-      ))}
+      <AllRoutesAndSubRoutesPages routes={routes} />
     </Switch>
   );
 };

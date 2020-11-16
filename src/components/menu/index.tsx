@@ -3,6 +3,7 @@ import { Menu } from "antd";
 import SubMenu from "antd/lib/menu/SubMenu";
 import { useHistory, Link } from "react-router-dom";
 import { routes } from "../../routes";
+import { IRoute } from "../../typescript/interfaces";
 
 const DynamicMenu = (props: any) => {
   const history = useHistory();
@@ -70,7 +71,7 @@ const DynamicMenu = (props: any) => {
 
   const DynamicMenu = (): JSX.Element => (
     <Menu theme="dark" mode="inline" openKeys={openKeys}>
-      {routes.map(({ route, name, subRoutes }, index) =>
+      {routes.map(({ route, name, subRoutes }: IRoute, index) =>
         subRoutes?.length
           ? renderSubMenu({ name, route, index, subRoutes })
           : renderMenuItem({ route, name, index })

@@ -3,10 +3,10 @@ export interface IRouteFragment {
   route: string;
 }
 
-export interface IRoutes {
+export interface IRoute {
   name: string;
   route: string;
   exact?: boolean;
-  page: JSX.Element | React.FunctionComponent;
-  subRoutes?: IRoutes[];
+  page: React.FunctionComponent;
+  subRoutes?: IRoute[];
 }
