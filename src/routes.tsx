@@ -18,7 +18,7 @@ export const routes: IRoutes[] = [
         name: 'SubHome0',
         route: '/home/subhome0',
         exact: true,
-        subRoutes: [{name: 'Bla', route: '/home/subhome/bla', exact: true, page: <Bla />}],
+        subRoutes: [{name: 'Bla', route: '/home/subhome0/bla', exact: true, page: <Bla />}],
         page: <SubHome />,
       },
       {name: 'SubHome1', route: '/home/subhome1', exact: true, page: <SubHome />},

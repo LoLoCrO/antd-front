@@ -6,7 +6,21 @@ import { routes } from "../../routes";
 
 const DynamicMenu = (props: any) => {
   const history = useHistory();
-  const handleSubMenuRootRouting = (route: string) => history.push(route);
+  const [openKeys, setOpenKeys] = React.useState<string[]>([]);
+
+  const handleSubMenuRootRouting = (route: string) => {
+    history.push(route);
+  };
+
+  const handleOpenKeys = (index: number | string) => {
+    const key = typeof index === "number" ? index.toString() : index;
+    if (openKeys.includes(key)) {
+      const newKeys = openKeys.filter((k) => k !== key);
+      setOpenKeys(newKeys);
+    } else {
+      setOpenKeys([...openKeys, key]);
+    }
+  };
 
   const renderMenuItem = ({
     route,
@@ -17,7 +31,7 @@ const DynamicMenu = (props: any) => {
     name: string;
     index: number;
   }): JSX.Element => (
-    <Menu.Item key={index}>
+    <Menu.Item key={index} onClick={() => handleOpenKeys(index)}>
       <Link to={route}>{name}</Link>
     </Menu.Item>
   );
@@ -30,24 +44,32 @@ const DynamicMenu = (props: any) => {
   }: {
     name: string;
     route: string;
-    index: number;
+    index: number | string;
     subRoutes: any[];
   }): JSX.Element => (
     <SubMenu
       key={`sub${index}`}
-      title={name}
-      onTitleClick={() => handleSubMenuRootRouting(route)}
+      title={
+        <div
+          onClick={() => {
+            handleSubMenuRootRouting(route);
+            handleOpenKeys(`sub${index}`);
+          }}
+        >
+          {name}
+        </div>
+      }
     >
       {subRoutes.map(({ route, name, subRoutes }, index) =>
         subRoutes?.length
-          ? renderSubMenu({ route, name, subRoutes, index })
+          ? renderSubMenu({ route, name, subRoutes, index: `sub${index}` })
           : renderMenuItem({ route, name, index })
       )}
     </SubMenu>
   );
 
   const DynamicMenu = (): JSX.Element => (
-    <Menu>
+    <Menu theme="dark" mode="inline" openKeys={openKeys}>
       {routes.map(({ route, name, subRoutes }, index) =>
         subRoutes?.length
           ? renderSubMenu({ name, route, index, subRoutes })
