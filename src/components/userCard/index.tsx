@@ -8,10 +8,11 @@ import {
 
 const { Meta } = Card;
 
-const UserCard = (user: any) => {
-  //   console.log(user);
+const UserCard: React.FunctionComponent<any> = ({
+  user,
+}): JSX.Element | null => {
   const [loading, setLoading] = React.useState<boolean>(true);
-  const [userData, setUserData] = React.useState<any | null>(null);
+  const [userData, setUserData] = React.useState<any>(user);
 
   React.useEffect(() => {
     if (!user) {
@@ -19,35 +20,19 @@ const UserCard = (user: any) => {
     } else {
       setUserData(Object.assign({}, user));
       setLoading(false);
+      console.log(user);
     }
   }, [user]);
 
-  if (!userData) {
-    return (
-      <Card
-        style={{ width: 350, margin: "1%" }}
-        actions={[
-          <SettingOutlined key="setting" />,
-          <EditOutlined key="edit" />,
-          <EllipsisOutlined key="ellipsis" />,
-        ]}
-      >
-        <Skeleton loading={true} avatar active>
-          <Meta
-            avatar={<Avatar src={""} />}
-            title="Card title"
-            description="This is the description"
-          />
-        </Skeleton>
-      </Card>
-    );
-  } else {
+  if (!userData) return null;
+  else {
     const {
       email,
-      name,//: { title, first, last },
-      location,//: { city, country },
-      picture,//: { medium },
+      name: { title, first, last },
+      location: { city, country },
+      picture: { medium },
     } = userData;
+
     return (
       <Card
         style={{ width: 350, margin: "1%" }}
@@ -59,9 +44,9 @@ const UserCard = (user: any) => {
       >
         <Skeleton loading={loading} avatar active>
           <Meta
-            avatar={<Avatar src={''} />}
+            avatar={<Avatar src={medium} />}
             title={email}
-            description={`${name}, ${location}`}
+            description={`${title}. ${first} ${last}, ${city}, ${country}`}
           />
         </Skeleton>
       </Card>

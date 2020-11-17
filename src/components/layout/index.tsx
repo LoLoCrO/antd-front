@@ -26,8 +26,8 @@ const AppLayout: React.FunctionComponent = ({ children }): JSX.Element => {
   }, [location.pathname]);
 
   const listBreadcrumbs = () =>
-    breadcrumbs.map(({ name, route }: IRouteFragment) => (
-      <Breadcrumb.Item>
+    breadcrumbs.map(({ name, route }: IRouteFragment, index: number) => (
+      <Breadcrumb.Item key={index}>
         <Link to={`/${route}`}>{name}</Link>
       </Breadcrumb.Item>
     ));
