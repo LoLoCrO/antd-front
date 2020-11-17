@@ -46,7 +46,11 @@ const UserCard: React.FunctionComponent<any> = ({
           <Meta
             avatar={<Avatar src={medium} />}
             title={email}
-            description={`${title}. ${first} ${last}, ${city}, ${country}`}
+            description={[
+              `${title}. ${first} ${last}`,
+              <br />,
+              ` ${city}, ${country}`,
+            ]}
           />
         </Skeleton>
       </Card>

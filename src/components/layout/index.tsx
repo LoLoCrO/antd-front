@@ -37,7 +37,13 @@ const AppLayout: React.FunctionComponent = ({ children }): JSX.Element => {
       <AppSider />
       <Page>
         <AppHeader />
-        <Content style={{ margin: "0 16px", background: "#F0F2F5" }}>
+        <Content
+          style={{
+            margin: "0 16px",
+            background: "#F0F2F5",
+            marginBottom: "2%",
+          }}
+        >
           <Breadcrumb style={{ margin: "1%" }}>{listBreadcrumbs()}</Breadcrumb>
           {children}
         </Content>
