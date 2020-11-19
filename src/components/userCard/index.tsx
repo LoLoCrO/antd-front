@@ -20,7 +20,6 @@ const UserCard: React.FunctionComponent<any> = ({
     } else {
       setUserData(Object.assign({}, user));
       setLoading(false);
-      console.log(user);
     }
   }, [user]);
 

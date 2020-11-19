@@ -14,7 +14,6 @@ const EmployeesList: React.FunctionComponent<{
     } else {
       setUsersData(Object.assign([], users));
       setLoading(false);
-      console.log(users);
     }
   }, [users]);
 
@@ -22,12 +21,14 @@ const EmployeesList: React.FunctionComponent<{
     <div
       style={{
         textAlign: "center",
-        margin: '3%',
+        margin: "3%",
         height: 32,
         lineHeight: "32px",
       }}
     >
-      <Button onClick={() => fetchUsers(true)}>loading more</Button>
+      <Button type="primary" onClick={() => fetchUsers(true)}>
+        Load more
+      </Button>
     </div>
   );
   //   (
@@ -43,7 +44,7 @@ const EmployeesList: React.FunctionComponent<{
         className="demo-loadmore-list"
         loading={loading}
         itemLayout="horizontal"
-        loadMore={<LoadMore/>}
+        loadMore={<LoadMore />}
         dataSource={usersData}
         renderItem={(item: any) => {
           const {
@@ -66,7 +67,7 @@ const EmployeesList: React.FunctionComponent<{
                   title={
                     <a href="">{`${title}. ${first} ${last} | ${city}, ${country}`}</a>
                   }
-                  description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                  description={`${email}`}
                 />
                 <div>content</div>
               </Skeleton>
