@@ -8,15 +8,31 @@ import { Link, useLocation } from "react-router-dom";
 import { getRouteFragments } from "../../util/routes";
 import { IRouteFragment } from "../../typescript/interfaces";
 
+const { Content } = Layout;
+
 const StyledLayout = styled(Layout)`
   min-height: 100vh;
+  height: 100vh;
 `;
 
 const Page = styled(Layout)`
   background: #f0f2f5;
 `;
 
-const { Content } = Layout;
+const StyledContent = styled(Content)`
+  margin: 0 16px;
+  background: #f0f2f5;
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledBreadcrumb = styled(Breadcrumb)`
+  padding: 2vmin;
+  position: sticky;
+  top: 6vmin;
+  background-color: #f0f2f5;
+  z-index: 10;
+`;
 
 const AppLayout: React.FunctionComponent = ({ children }): JSX.Element => {
   const location = useLocation();
@@ -25,29 +41,26 @@ const AppLayout: React.FunctionComponent = ({ children }): JSX.Element => {
     setBreadcrumbs(getRouteFragments(location.pathname));
   }, [location.pathname]);
 
-  const listBreadcrumbs = () =>
-    breadcrumbs.map(({ name, route }: IRouteFragment, index: number) => (
-      <Breadcrumb.Item key={index}>
-        <Link to={`/${route}`}>{name}</Link>
-      </Breadcrumb.Item>
-    ));
+  const Breadcrumbs = () => (
+    <StyledBreadcrumb>
+      {breadcrumbs.map(({ name, route }: IRouteFragment, index: number) => (
+        <Breadcrumb.Item key={index}>
+          <Link to={`/${route}`}>{name}</Link>
+        </Breadcrumb.Item>
+      ))}
+    </StyledBreadcrumb>
+  );
 
   return (
     <StyledLayout>
       <AppSider />
       <Page>
         <AppHeader />
-        <Content
-          style={{
-            margin: "0 16px",
-            background: "#F0F2F5",
-            marginBottom: "2%",
-          }}
-        >
-          <Breadcrumb style={{ margin: "1%" }}>{listBreadcrumbs()}</Breadcrumb>
+        <Breadcrumbs />
+        <StyledContent>
           {children}
-        </Content>
-        <AppFooter />
+          <AppFooter />
+        </StyledContent>
       </Page>
     </StyledLayout>
   );

@@ -7,6 +7,7 @@ const {Footer} = Layout;
 const StyledFooter = styled(Footer)`
   text-align: center;
   background: #fff;
+  margin-top: auto;
 `;
 
 const AppFooter: React.FunctionComponent = (): JSX.Element => {

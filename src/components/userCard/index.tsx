@@ -5,8 +5,14 @@ import {
   EllipsisOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import styled from "styled-components";
 
 const { Meta } = Card;
+
+const StyledCard = styled(Card)`
+  width: 350px;
+  margin: 1%;
+`;
 
 const UserCard: React.FunctionComponent<any> = ({
   user,
@@ -33,8 +39,7 @@ const UserCard: React.FunctionComponent<any> = ({
     } = userData;
 
     return (
-      <Card
-        style={{ width: 350, margin: "1%" }}
+      <StyledCard
         actions={[
           <SettingOutlined key="setting" />,
           <EditOutlined key="edit" />,
@@ -49,10 +54,12 @@ const UserCard: React.FunctionComponent<any> = ({
               `${title}. ${first} ${last}`,
               <br />,
               ` ${city}, ${country}`,
-            ]}
+            ].map((el: any, index: number) => (
+              <div key={index}>{el}</div>
+            ))}
           />
         </Skeleton>
-      </Card>
+      </StyledCard>
     );
   }
 };

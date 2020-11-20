@@ -10,6 +10,8 @@ const StyledLogo = styled.img`
   height: 5vh;
   display: flex;
   margin: auto;
+  position: sticky;
+
 `;
 
 const AppSider: React.FunctionComponent = (): JSX.Element => {

@@ -4,8 +4,49 @@ import axios from "axios";
 import { Col, Pagination, Row, Radio, Button, Input } from "antd";
 import EmployeesList from "../../components/employeesList";
 import { RadioChangeEvent } from "antd/lib/radio";
+import EmployeesTable from "../../components/employeesTable";
+import styled from "styled-components";
 
 const { Search } = Input;
+
+const EmployeesPage = styled(Row)`
+  background-color: white;
+  display: flex;
+  position: relative;
+`;
+
+const EmployeesTopBar = styled.div`
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  position: sticky;
+  background-color: #fff;
+  flex-grow: 1;
+  padding-top: 2vmin;
+  padding-bottom: 2vmin;
+  top: 12.2vmin;
+  padding-left: 5%;
+  padding-right: 5%;
+`;
+
+const ListViewWrapper = styled(Col)`
+  padding: 2%;
+`;
+
+const StyledSearch = styled(Search)`
+  width: 200px;
+`;
+
+const PaginationWrapper = styled(Row)`
+  margin-bottom: 3vmin;
+`;
+
+const LoadMoreBtnWrapper = styled(Col)`
+  text-align: center;
+  margin: 3%;
+  height: 32;
+  line-height: 32px;
+`;
 
 const Employees: React.FunctionComponent = (): JSX.Element => {
   const [usersData, setUsersData] = React.useState<any[]>([]);
@@ -36,30 +77,6 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
   React.useEffect(() => {
     fetchUsers();
   }, []);
-
-  const DispayUsersCards = (): JSX.Element => (
-    <>
-      {(searchedUsers && searchedUsers.length
-        ? searchedUsers
-        : displayedUsers
-      ).map((user: any, index: number) => (
-        <UserCard key={index} user={user} />
-      ))}
-      <Col
-        span={24}
-        style={{
-          textAlign: "center",
-          margin: "3%",
-          height: 32,
-          lineHeight: "32px",
-        }}
-      >
-        <Button type="primary" onClick={() => fetchUsers(true)}>
-          Load more
-        </Button>
-      </Col>
-    </>
-  );
 
   const switchUsersView = (e: RadioChangeEvent) => setViewType(e.target.value);
 
@@ -101,40 +118,83 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
     }
   };
 
+  const LoadMore = () => (
+    <LoadMoreBtnWrapper span={24}>
+      <Button type="primary" onClick={() => fetchUsers(true)}>
+        Load more
+      </Button>
+    </LoadMoreBtnWrapper>
+  );
+
+  const DispayUsersCards = (): JSX.Element => (
+    <>
+      {(searchedUsers && searchedUsers.length
+        ? searchedUsers
+        : displayedUsers
+      ).map((user: any, index: number) => (
+        <UserCard key={index} user={user} />
+      ))}
+      <LoadMore />
+    </>
+  );
+
+  const ListView = () => (
+    <ListViewWrapper span={24}>
+      <EmployeesList
+        LoadMore={LoadMore}
+        users={
+          searchedUsers && searchedUsers.length ? searchedUsers : displayedUsers
+        }
+      />
+    </ListViewWrapper>
+  );
+
+  const Views = () => {
+    switch (viewType) {
+      case "list":
+        return <ListView />;
+      case "table":
+        return (
+          <>
+            <EmployeesTable employees={displayedUsers} />
+            <LoadMore />
+          </>
+        );
+      case "card":
+        return (
+          <Row justify="space-around">
+            <DispayUsersCards />
+          </Row>
+        );
+      default:
+        return <ListView />;
+    }
+  };
+
+  const viewTypes: string[] = ["List", "Table", "Card"];
+
+  const RadioOptions = (): JSX.Element => (
+    <Radio.Group onChange={switchUsersView} defaultValue={viewType}>
+      {viewTypes.map((value: string, index: number) => (
+        <Radio.Button key={index} value={value.toLowerCase()}>
+          {value}
+        </Radio.Button>
+      ))}
+    </Radio.Group>
+  );
+
   return (
-    <Row
-      style={{ backgroundColor: "white", paddingTop: "3%", display: "flex" }}
-      justify="center"
-    >
-      <Col span={24} style={{ display: "flex", justifyContent: "center" }}>
-        <Search
+    <EmployeesPage justify="center">
+      <EmployeesTopBar>
+        <StyledSearch
           placeholder="input search text"
           onSearch={onSearch}
           onChange={(e) => onSearch(e.target.value)}
-          style={{ width: 200 }}
         />
-        <Radio.Group onChange={switchUsersView} defaultValue="list">
-          <Radio.Button value="list">List</Radio.Button>
-          <Radio.Button value="card">Cards</Radio.Button>
-        </Radio.Group>
-      </Col>
-      {viewType === "list" ? (
-        <Col span={24} style={{ padding: "2%" }}>
-          <EmployeesList
-            users={
-              searchedUsers && searchedUsers.length
-                ? searchedUsers
-                : displayedUsers
-            }
-            fetchUsers={fetchUsers}
-          />
-        </Col>
-      ) : (
-        <Row justify="space-around">
-          <DispayUsersCards />
-        </Row>
-      )}
-      <Row style={{ marginBottom: "3%" }}>
+        <RadioOptions />
+      </EmployeesTopBar>
+      <Views />
+      <PaginationWrapper>
         <Pagination
           defaultCurrent={1}
           defaultPageSize={20}
@@ -145,8 +205,8 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
           disabled={usersData.length < 10}
           showQuickJumper
         />
-      </Row>
-    </Row>
+      </PaginationWrapper>
+    </EmployeesPage>
   );
 };
 

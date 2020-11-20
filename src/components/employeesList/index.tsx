@@ -3,8 +3,8 @@ import React from "react";
 
 const EmployeesList: React.FunctionComponent<{
   users: any[];
-  fetchUsers: (shouldExtendList?: boolean) => Promise<void>;
-}> = ({ users, fetchUsers }): JSX.Element | null => {
+  LoadMore: () => JSX.Element;
+}> = ({ users, LoadMore }): JSX.Element | null => {
   const [loading, setLoading] = React.useState<boolean>(true);
   const [usersData, setUsersData] = React.useState<any>(users);
 
@@ -16,26 +16,6 @@ const EmployeesList: React.FunctionComponent<{
       setLoading(false);
     }
   }, [users]);
-
-  const LoadMore = (): JSX.Element => (
-    <div
-      style={{
-        textAlign: "center",
-        margin: "3%",
-        height: 32,
-        lineHeight: "32px",
-      }}
-    >
-      <Button type="primary" onClick={() => fetchUsers(true)}>
-        Load more
-      </Button>
-    </div>
-  );
-  //   (
-  //     <div style={{ height: "50px", backgroundColor: "red" }}>
-  //       <Button onClick={() => fetchUsers(true)}>loading more</Button>
-  //     </div>
-  //   );
 
   if (!users.length) return null;
   else {
@@ -69,7 +49,6 @@ const EmployeesList: React.FunctionComponent<{
                   }
                   description={`${email}`}
                 />
-                <div>content</div>
               </Skeleton>
             </List.Item>
           );
