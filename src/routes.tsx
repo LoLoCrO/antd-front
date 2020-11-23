@@ -1,12 +1,20 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./pages/home";
+import Profile from "./pages/employees/profile";
 import Employees from "./pages/employees";
 import SubHome from "./pages/home/subhome";
 import Bla from "./pages/home/subhome/bla";
 import { IRoute } from "./typescript/interfaces";
 
 export const routes: IRoute[] = [
+  {
+    name: "Profile",
+    route: "/employees/profile",
+    exact: true,
+    page: Profile,
+    hideInNavigation: true,
+  },
   { name: "Index", route: "/", exact: true, page: Home },
   {
     name: "Home",
@@ -42,8 +50,8 @@ export const routes: IRoute[] = [
       },
     ],
   },
-  { name: "Employees", route: "/employees", page: Employees },
-  { name: "Employees0", route: "/employees0", page: Employees },
+  { name: "Employees", route: "/employees", exact: true, page: Employees },
+  { name: "Employees0", route: "/employees0", exact: true, page: Employees },
 ];
 
 const AllRoutesAndSubRoutesPages = ({ routes }: { routes: IRoute[] }): any =>

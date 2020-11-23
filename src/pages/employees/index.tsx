@@ -1,7 +1,7 @@
 import React from "react";
 import UserCard from "../../components/userCard";
 import axios from "axios";
-import { Col, Pagination, Row, Radio, Button, Input } from "antd";
+import { Col, Pagination, Row, Radio, Button, Input, Drawer } from "antd";
 import EmployeesList from "../../components/employeesList";
 import { RadioChangeEvent } from "antd/lib/radio";
 import EmployeesTable from "../../components/employeesTable";
@@ -55,6 +55,7 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
   const [page, setPage] = React.useState<number>(1);
   const [pageSize, setPageSize] = React.useState<number>(20);
   const [viewType, setViewType] = React.useState<string>("list");
+  const [isDrawerOpen, setDrawerOpen] = React.useState<boolean>(false);
 
   const fetchUsers = async (shouldExtendList?: boolean) => {
     const {
@@ -63,6 +64,13 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
 
     // initial case
     if (!usersData.length) {
+      results.forEach((user: any, index: number, updatedResults: any[]) => {
+        updatedResults[index] = !user.id.value
+          ? Object.assign({}, user, {
+              id: { value: Math.random() * (9999 - 1000) + 1000 },
+            })
+          : user;
+      });
       setUsersData(results);
       setDisplayedUsers(await results.slice(0, 20));
     } else if (shouldExtendList && usersData.length) {
@@ -206,6 +214,14 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
           showQuickJumper
         />
       </PaginationWrapper>
+      <Drawer
+        title="Basic Drawer"
+        placement={"right"}
+        closable={true}
+        onClose={() => setDrawerOpen(false)}
+        visible={isDrawerOpen}
+        key={""}
+      ></Drawer>
     </EmployeesPage>
   );
 };

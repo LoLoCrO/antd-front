@@ -12,6 +12,7 @@ export const getRouteFragments = (url: string): IRouteFragment[] => {
   if (url === "/") return [{ name: "Home", route: "/Home" }];
 
   const pathnameFragments: string[] = url
+    .toLowerCase()
     .split("/")
     .filter((element: string) => element !== "");
 

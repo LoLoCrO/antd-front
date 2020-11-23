@@ -7,6 +7,7 @@ export interface IRoute {
   name: string;
   route: string;
   exact?: boolean;
+  hideInNavigation?: boolean;
   page: React.FunctionComponent;
   subRoutes?: IRoute[];
 }

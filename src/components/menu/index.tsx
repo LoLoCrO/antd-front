@@ -71,11 +71,13 @@ const DynamicMenu = (props: any) => {
 
   const DynamicMenu = (): JSX.Element => (
     <Menu theme="dark" mode="inline" openKeys={openKeys}>
-      {routes.map(({ route, name, subRoutes }: IRoute, index) =>
-        subRoutes?.length
-          ? renderSubMenu({ name, route, index, subRoutes })
-          : renderMenuItem({ route, name, index })
-      )}
+      {routes
+        .filter((route: IRoute) => !route.hideInNavigation)
+        .map(({ route, name, subRoutes }: IRoute, index) =>
+          subRoutes?.length
+            ? renderSubMenu({ name, route, index, subRoutes })
+            : renderMenuItem({ route, name, index })
+        )}
     </Menu>
   );
 
