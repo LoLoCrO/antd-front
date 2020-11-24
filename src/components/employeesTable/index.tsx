@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Avatar, Image, Row, Col } from "antd";
+import { Table, Avatar, Image, Row, Col, Button } from "antd";
 import styled from "styled-components";
 
 const StyledTable = styled(Table)`
@@ -36,7 +36,11 @@ const EmployeesTable: React.FunctionComponent<any> = ({
       title: "Email",
       dataIndex: "email",
       key: "email",
-      render: (text: string, { key }: any) => <a key={key}>{text}</a>,
+      render: (text: string, { key }: any) => (
+        <Button type="link" key={key}>
+          {text}
+        </Button>
+      ),
     },
   ];
 

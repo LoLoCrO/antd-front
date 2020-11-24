@@ -5,12 +5,25 @@ export interface IEmployeeContext {
   setCurrentEmployee: (currentEmployee: any) => void;
 }
 
-export const DEFAULT_CURRENT_USER: IEmployeeContext = {
+export interface IEmployeesContext {
+  employees: any[];
+  setCurrentEmployees: (currentEmployees: any[]) => void;
+}
+
+export const DEFAULT_CURRENT_EMPLOYEE: IEmployeeContext = {
   employee: {},
   setCurrentEmployee: () => {},
 };
 
-export const EmployeesContext = React.createContext<any[]>([]);
+export const DEFAULT_CURRENT_EMPLOYEES: IEmployeesContext = {
+  employees: [],
+  setCurrentEmployees: () => {},
+};
+
 export const EmployeeContext = React.createContext<IEmployeeContext>(
-  DEFAULT_CURRENT_USER
+  DEFAULT_CURRENT_EMPLOYEE
+);
+
+export const EmployeesContext = React.createContext<IEmployeesContext>(
+  DEFAULT_CURRENT_EMPLOYEES
 );

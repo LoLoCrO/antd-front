@@ -1,11 +1,13 @@
 import React from "react";
 import UserCard from "../../components/userCard";
 import axios from "axios";
-import { Col, Pagination, Row, Radio, Button, Input, Drawer } from "antd";
+import { Col, Pagination, Row, Radio, Button, Input } from "antd";
 import EmployeesList from "../../components/employeesList";
 import { RadioChangeEvent } from "antd/lib/radio";
 import EmployeesTable from "../../components/employeesTable";
 import styled from "styled-components";
+import { EmployeesContext } from "../../state/employees";
+import EditEmployeeDrawer from "../../components/editEmployeeDrawer";
 
 const { Search } = Input;
 
@@ -49,7 +51,7 @@ const LoadMoreBtnWrapper = styled(Col)`
 `;
 
 const Employees: React.FunctionComponent = (): JSX.Element => {
-  const [usersData, setUsersData] = React.useState<any[]>([]);
+  const { employees, setCurrentEmployees } = React.useContext(EmployeesContext);
   const [displayedUsers, setDisplayedUsers] = React.useState<any[]>([]);
   const [searchedUsers, setSearchedUsers] = React.useState<any[]>([]);
   const [page, setPage] = React.useState<number>(1);
@@ -63,7 +65,7 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
     } = await axios.get(`https://randomuser.me/api/?results=55`);
 
     // initial case
-    if (!usersData.length) {
+    if (!employees.length) {
       results.forEach((user: any, index: number, updatedResults: any[]) => {
         updatedResults[index] = !user.id.value
           ? Object.assign({}, user, {
@@ -71,10 +73,10 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
             })
           : user;
       });
-      setUsersData(results);
+      setCurrentEmployees(results);
       setDisplayedUsers(await results.slice(0, 20));
-    } else if (shouldExtendList && usersData.length) {
-      setUsersData([...usersData, ...results]);
+    } else if (shouldExtendList && employees.length) {
+      setCurrentEmployees([...employees, ...results]);
       setPageSize(pageSize + pageSize);
       setDisplayedUsers(await results.slice((page - 1) * pageSize, pageSize));
     } else {
@@ -83,8 +85,19 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
   };
 
   React.useEffect(() => {
-    fetchUsers();
+    console.log("Page");
+    if (!employees.length) {
+      fetchUsers();
+    } else if (displayedUsers.length) {
+      return;
+    } else {
+      setDisplayedUsers(employees.slice(0, 20));
+    }
   }, []);
+
+  React.useEffect(() => {
+    console.log("Alo ej");
+  }, [displayedUsers]);
 
   const switchUsersView = (e: RadioChangeEvent) => setViewType(e.target.value);
 
@@ -94,14 +107,14 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
     const lowerBound = (page - 1) * pageSize; // multiplication has priority
     const upperBound = lowerBound + pageSize;
 
-    const newUsersToDisplay = usersData.slice(lowerBound, upperBound);
+    const newUsersToDisplay = employees.slice(lowerBound, upperBound);
     setDisplayedUsers(newUsersToDisplay);
   };
 
   const onSearch = (value: string) => {
     if (value.length) {
       setSearchedUsers(
-        usersData.filter((user: any) => {
+        employees.filter((user: any) => {
           return Object.keys(user).find((key: string) => {
             if (
               typeof user[key] === "string" &&
@@ -150,6 +163,7 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
     <ListViewWrapper span={24}>
       <EmployeesList
         LoadMore={LoadMore}
+        setDrawerOpen={setDrawerOpen}
         users={
           searchedUsers && searchedUsers.length ? searchedUsers : displayedUsers
         }
@@ -208,20 +222,16 @@ const Employees: React.FunctionComponent = (): JSX.Element => {
           defaultPageSize={20}
           current={page}
           pageSize={pageSize}
-          total={usersData.length}
+          total={employees.length}
           onChange={listPagination}
-          disabled={usersData.length < 10}
+          disabled={employees.length < 10}
           showQuickJumper
         />
       </PaginationWrapper>
-      <Drawer
-        title="Basic Drawer"
-        placement={"right"}
-        closable={true}
-        onClose={() => setDrawerOpen(false)}
-        visible={isDrawerOpen}
-        key={""}
-      ></Drawer>
+      <EditEmployeeDrawer
+        isDrawerOpen={isDrawerOpen}
+        setDrawerOpen={setDrawerOpen}
+      />
     </EmployeesPage>
   );
 };

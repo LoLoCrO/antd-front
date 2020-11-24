@@ -5,7 +5,7 @@ import { Layout, Breadcrumb } from "antd";
 import styled from "styled-components";
 import AppFooter from "../footer";
 import { Link, useLocation } from "react-router-dom";
-import { getRouteFragments } from "../../util/routes";
+import { getRouteFragments } from "../../utils/routes";
 import { IRouteFragment } from "../../typescript/interfaces";
 
 const { Content } = Layout;
